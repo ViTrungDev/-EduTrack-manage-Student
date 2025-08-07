@@ -25,9 +25,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user'] = [
                 'id' => $user['UserID'],
                 'name' => $user['FullName'],
-                'role' => $user['Role']
+                'role' => $user['Role'],
+                'email' => $user['Email'],
             ];
-            header("Location: ../page/dashboard.php");
+            // Điều hướng theo role
+            if ($user['Role'] === 'admin' || $user['Role'] === 'teacher') {
+                header("Location: ../page/dashboard.php");
+            } elseif ($user['Role'] === 'student') {
+                header("Location: ../page/student.php");
+            } else {
+                $_SESSION['error'] = "Vai trò người dùng không hợp lệ.";
+                header("Location: ../index.php");
+            }
             exit();
         } else {
             $_SESSION['error'] = "Tên đăng nhập hoặc mật khẩu không đúng";
