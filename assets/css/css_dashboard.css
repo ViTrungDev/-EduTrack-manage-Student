@@ -56,3 +56,69 @@
   align-items: center;
   gap: 5px;
 }
+.content-main{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+.history-student , .dashboard{
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 100%;
+}
+.history-item{
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  align-items: center;
+  gap: 10px;
+}
+.history-list{
+  width: 100%;
+}
+.history-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.btn-primary{
+  color:#3d56d2;
+  font-size:16px !important;
+}
+.history-details{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap:280px;
+}
+.manage-footer{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 20px 60px 40px 60px;
+}
+.manage-item{
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+.manage_group{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.manage-desc{
+  font-size: 14px;
+  color: #666;
+}
+.manage-title{
+  text-align: left;
+}

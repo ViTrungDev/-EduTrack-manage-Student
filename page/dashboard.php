@@ -1,117 +1,8 @@
 <?php
-session_start();
-require_once '../config/db.php';
-
-// Kiểm tra đăng nhập
-if (!isset($_SESSION['user'])) {
-    header("Location: ../index.php");
-    exit();
-}
-
-// Chỉ cho phép admin/teacher
-if ($_SESSION['user']['role'] !== 'admin' && $_SESSION['user']['role'] !== 'teacher') {
-    header("Location: ../index.php");
-    exit();
-}
-
-// ======= TỔNG SỐ SINH VIÊN =======
-$sql = 'SELECT COUNT(*) AS total_students FROM USERS WHERE role = "student"';
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$total_students = $stmt->fetchColumn();
-
-// ======= TĂNG TRƯỞNG SINH VIÊN NĂM =======
-$currentYear = date('Y');
-$lastYear = $currentYear - 1;
-
-$sqlCurrent = 'SELECT COUNT(*) FROM USERS WHERE role = "student" AND YEAR(CreatedAt) = :currentYear';
-$stmt = $conn->prepare($sqlCurrent);
-$stmt->bindParam(':currentYear', $currentYear, PDO::PARAM_INT);
-$stmt->execute();
-$currentCount = $stmt->fetchColumn();
-
-$sqlLast = 'SELECT COUNT(*) FROM USERS WHERE role = "student" AND YEAR(CreatedAt) = :lastYear';
-$stmt = $conn->prepare($sqlLast);
-$stmt->bindParam(':lastYear', $lastYear, PDO::PARAM_INT);
-$stmt->execute();
-$lastCount = $stmt->fetchColumn();
-
-$growthYear = $lastCount == 0 ? ($currentCount > 0 ? 100 : 0) : round((($currentCount - $lastCount) / $lastCount) * 100, 2);
-
-// ======= SINH VIÊN MỚI TRONG THÁNG & SO VỚI THÁNG TRƯỚC =======
-$startThisMonth = date('Y-m-01');
-$startLastMonth = date('Y-m-01', strtotime('-1 month'));
-$endLastMonth = date('Y-m-t', strtotime('-1 month'));
-
-$sqlThisMonth = "SELECT COUNT(*) FROM Users WHERE role = 'student' AND CreatedAt >= :startThisMonth";
-$stmt = $conn->prepare($sqlThisMonth);
-$stmt->bindParam(':startThisMonth', $startThisMonth);
-$stmt->execute();
-$thisMonthCount = $stmt->fetchColumn();
-
-$sqlLastMonth = "SELECT COUNT(*) FROM Users WHERE role = 'student' AND CreatedAt >= :startLastMonth AND CreatedAt <= :endLastMonth";
-$stmt = $conn->prepare($sqlLastMonth);
-$stmt->bindParam(':startLastMonth', $startLastMonth);
-$stmt->bindParam(':endLastMonth', $endLastMonth);
-$stmt->execute();
-$lastMonthCount = $stmt->fetchColumn();
-
-$growthMonth = $lastMonthCount == 0 ? ($thisMonthCount > 0 ? 100 : 0) : round((($thisMonthCount - $lastMonthCount) / $lastMonthCount) * 100, 2);
-
-$iconYear = $growthYear >= 0 ? 'arrow_upward' : 'arrow_downward_alt';
-$classYear = $growthYear >= 0 ? 'text-success' : 'text-danger';
-$prefixYear = $growthYear >= 0 ? '+' : '-';
-
-$iconMonth = $growthMonth >= 0 ? 'arrow_upward' : 'arrow_downward_alt';
-$classMonth = $growthMonth >= 0 ? 'text-success' : 'text-danger';
-$prefixMonth = $growthMonth >= 0 ? '+' : '-';
-
-// ======= GPA TRUNG BÌNH & TỶ LỆ TỐT NGHIỆP NĂM HIỆN TẠI VÀ NĂM TRƯỚC =======
-function getGPAStats($conn, $year) {
-    $sql = "SELECT e.StudentID, 
-                   ROUND(AVG(
-                       COALESCE(g.Midterm,0)*0.3 + 
-                       COALESCE(g.Final,0)*0.6 + 
-                       COALESCE(g.Attendance,0)*0.1
-                   ), 2) AS avg_gpa
-            FROM Grades g
-            JOIN Enrollments e ON g.EnrollmentID = e.EnrollmentID
-            WHERE e.Semester LIKE :semester
-            GROUP BY e.StudentID";
-
-    $stmt = $conn->prepare($sql);
-    $semester = "%-" . $year;
-    $stmt->bindParam(':semester', $semester);
-    $stmt->execute();
-    $gpas = $stmt->fetchAll();
-
-    $totalGPA = 0;
-    $graduates = 0;
-    $count = count($gpas);
-
-    foreach ($gpas as $row) {
-        $totalGPA += $row['avg_gpa'];
-        if ($row['avg_gpa'] >= 2.5) {
-            $graduates++;
-        }
-    }
-
-    $avgGPA = $count > 0 ? round($totalGPA / $count, 2) : 0;
-    $gradRate = $count > 0 ? round(($graduates / $count) * 100, 2) : 0;
-
-    return ['gpa' => $avgGPA, 'rate' => $gradRate];
-}
-
-$currentStats = getGPAStats($conn, $currentYear);
-$lastStats = getGPAStats($conn, $lastYear);
-
-$gpaGrowth = $lastStats['gpa'] > 0 ? round((($currentStats['gpa'] - $lastStats['gpa']) / $lastStats['gpa']) * 100, 2) : 100;
-$rateGrowth = $lastStats['rate'] > 0 ? round((($currentStats['rate'] - $lastStats['rate']) / $lastStats['rate']) * 100, 2) : 100;
-
 include '../includes/header.php';
+include '../Handlers/Handler_dashboard.php';
 ?>
 
-<!-- CSS -->
 <link rel="stylesheet" href="../assets/css/css_dashboard.css">
 <link rel="stylesheet" href="../assets/css/global.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
@@ -137,7 +28,6 @@ include '../includes/header.php';
   </div>
 
   <div class="content-percentage">
-    <!-- Tổng sinh viên -->
     <div class="percentage-item">
       <p class="percentage-title">Tổng sinh viên</p>
       <div class="percentage-value">
@@ -150,7 +40,6 @@ include '../includes/header.php';
       </div>
     </div>
 
-    <!-- Sinh viên mới -->
     <div class="percentage-item">
       <p class="percentage-title">Sinh viên mới</p>
       <div class="percentage-value">
@@ -163,41 +52,206 @@ include '../includes/header.php';
       </div>
     </div>
 
-    <!-- GPA trung bình -->
-<div class="percentage-item">
-  <p class="percentage-title">GPA trung bình</p>
-  <div class="percentage-value">
-    <p class="value-total"><?= $currentStats['gpa'] ?></p>
-    <p class="group material-symbols-outlined">school</p>
-  </div>
-  <div class="text-muted icon-down">
-    <span class="material-symbols-outlined">
-      <?= $gpaGrowth >= 0 ? 'trending_up' : 'trending_down' ?>
-    </span>
-    <span class="desc-value" style="color: <?= $gpaGrowth >= 0 ? 'green' : 'red' ?>;">
-      <?= ($gpaGrowth >= 0 ? '+' : '') . round($gpaGrowth, 2) ?>% so với năm trước
-    </span>
-  </div>
-</div>
+    <div class="percentage-item">
+      <p class="percentage-title">GPA trung bình</p>
+      <div class="percentage-value">
+        <p class="value-total"><?= $currentStats['gpa'] ?></p>
+        <p class="group material-symbols-outlined">school</p>
+      </div>
+      <div class="text-muted icon-down">
+        <span class="material-symbols-outlined">
+          <?= $gpaGrowth >= 0 ? 'trending_up' : 'trending_down' ?>
+        </span>
+        <span class="desc-value" style="color: <?= $gpaGrowth >= 0 ? 'green' : 'red' ?>;">
+          <?= ($gpaGrowth >= 0 ? '+' : '') . round($gpaGrowth, 2) ?>% so với năm trước
+        </span>
+      </div>
+    </div>
 
-<!-- Tỷ lệ tốt nghiệp -->
-<div class="percentage-item">
-  <p class="percentage-title">Tỷ lệ tốt nghiệp</p>
-  <div class="percentage-value">
-    <p class="value-total"><?= $currentStats['rate'] ?>%</p>
-    <p class="group material-symbols-outlined">check_circle</p>
+    <div class="percentage-item">
+      <p class="percentage-title">Tỷ lệ tốt nghiệp</p>
+      <div class="percentage-value">
+        <p class="value-total"><?= $currentStats['rate'] ?>%</p>
+        <p class="group material-symbols-outlined">check_circle</p>
+      </div>
+      <div class="text-muted icon-down">
+        <span class="material-symbols-outlined">
+          <?= $rateGrowth >= 0 ? 'trending_up' : 'trending_down' ?>
+        </span>
+        <span class="desc-value" style="color: <?= $rateGrowth >= 0 ? 'green' : 'red' ?>;">
+          <?= ($rateGrowth >= 0 ? '+' : '') . round($rateGrowth, 2) ?>% so với năm trước
+        </span>
+      </div>
+    </div>
   </div>
-  <div class="text-muted icon-down">
-    <span class="material-symbols-outlined">
-      <?= $rateGrowth >= 0 ? 'trending_up' : 'trending_down' ?>
-    </span>
-    <span class="desc-value" style="color: <?= $rateGrowth >= 0 ? 'green' : 'red' ?>;">
-      <?= ($rateGrowth >= 0 ? '+' : '') . round($rateGrowth, 2) ?>% so với năm trước
-    </span>
-  </div>
-</div>
 
+  <div class="content-main">
+    <div class="history-student">
+      <div class="history-header">
+        <h3>Lịch sử hoạt động</h3>
+        <a href="../page/history.php" class="btn btn-primary">Xem chi tiết</a>
+      </div>
+      <div class="history-list">
+        <?php if (!empty($recentStudents)): ?>
+        <?php foreach ($recentStudents as $student): ?>
+        <?php
+                    $firstLetter = '';
+                    if (!empty($student['FullName'])) {
+                        $firstLetter = mb_substr(trim($student['FullName']), 0, 1, 'UTF-8');
+                    }
+                ?>
+        <div class="history-item">
+          <div class="history-avatar">
+            <div class="avatar-circle"><?= htmlspecialchars($firstLetter) ?></div>
+          </div>
+          <div class="history-details">
+            <div class="history-info">
+              <p class="history-name"><?= htmlspecialchars($student['FullName']) ?></p>
+              <p class="history-code">Mã SV: <?= htmlspecialchars($student['StudentCode']) ?></p>
+            </div>
+            <p class="history-time"><?= date("d/m/Y H:i", strtotime($student['CreatedAt'])) ?></p>
+          </div>
+        </div>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <p>Không có sinh viên mới nào.</p>
+        <?php endif; ?>
+      </div>
+    </div>
+    <div class="dashboard">
+      <h3>Thống kê theo ngành</h3>
+
+      <?php
+      // ======= LẤY DỮ LIỆU THEO NGÀNH VÀ GỘP "KHÁC" =======
+      $sqlPrograms = "
+        SELECT p.ProgramName, COUNT(u.UserID) AS TotalStudents
+        FROM ProgramInfo p
+        LEFT JOIN Users u ON u.ProgramID = p.ProgramID AND u.Role = 'student'
+        GROUP BY p.ProgramName
+        ORDER BY p.ProgramID
+      ";
+      $stmtP = $conn->prepare($sqlPrograms);
+      $stmtP->execute();
+      $programRows = $stmtP->fetchAll(PDO::FETCH_ASSOC);
+
+      // 4 ngành chính cần hiển thị riêng
+      $mainPrograms = [
+        'Công Nghệ Thông Tin' => 0,
+        'Kế Toán' => 0,
+        'Ngôn ngữ Anh' => 0,
+        'Quản trị kinh doanh' => 0,
+        'Khác' => 0
+      ];
+
+      foreach ($programRows as $r) {
+        $pname = $r['ProgramName'];
+        $count = (int)$r['TotalStudents'];
+        if (array_key_exists($pname, $mainPrograms) && $pname !== 'Khác') {
+          $mainPrograms[$pname] += $count;
+        } else {
+          $mainPrograms['Khác'] += $count;
+        }
+      }
+
+      $chartLabels = array_keys($mainPrograms);
+      $chartData = array_values($mainPrograms);
+      ?>
+
+      <!-- Canvas cho Chart.js -->
+      <canvas id="programChart" height="180"></canvas>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+      const labels = <?= json_encode($chartLabels, JSON_UNESCAPED_UNICODE) ?>;
+      const data = <?= json_encode($chartData) ?>;
+      const ctx = document.getElementById('programChart').getContext('2d');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Số sinh viên',
+            data: data,
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1,
+            barPercentage: 0.6, // Thu nhỏ bề rộng từng cột
+            categoryPercentage: 0.6 // Thu nhỏ khung ngoài
+          }]
+        },
+        options: {
+          indexAxis: 'y', // Cột ngang
+          responsive: true,
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                precision: 0
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              enabled: true
+            }
+          }
+        }
+      });
+      </script>
+
+    </div>
+  </div>
+  <div class="manage-footer">
+    <div class="manage-item manage-student">
+      <a href="../page/student.php" class="manage-link">
+        <div class="manage_group">
+          <p class="group material-symbols-outlined">person</p>
+          <div class="manage_student-desc">
+            <h5 class="manage-title">Quản lý sinh viên</h5>
+            <p class="manage-desc">Xem và chỉnh sửa thông tin sinh viên</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="manage-item manage-teacher">
+      <a href="../page/teacher.php" class="manage-link">
+        <div class="manage_group">
+          <p class="group material-symbols-outlined">group</p>
+          <div class="manage_teacher-desc">
+            <h5 class="manage-title">Quản lý giáo viên</h5>
+            <p class="manage-desc">Xem và chỉnh sửa thông tin giáo viên</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="manage-item manage-program">
+      <a href="../page/program.php" class="manage-link">
+        <div class="manage_group">
+          <p class="group material-symbols-outlined">book_2</p>
+          <div class="manage_program-desc">
+            <h5 class="manage-title">Quản lý môn học </h5>
+            <p class="manage-desc">Xem và chỉnh sửa thông tin chương trình</p>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
 </main>
 </body>
+
 </html>
