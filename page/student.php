@@ -1,1 +1,149 @@
-<h1>hello student</h1>
+<?php
+session_start();
+require_once '../config/db.php';
+
+// Kiểm tra đăng nhập và role
+if (!isset($_SESSION['user'])) {
+    header('Location: ../index.php');
+    exit();
+}
+
+if ($_SESSION['user']['role'] !== 'student') {
+    header('Location: ../page/dashboard.php');
+    exit();
+}
+
+// Lấy thông tin sinh viên
+$user_id = $_SESSION['user']['id'];
+try {
+    $stmt = $conn->prepare("
+        SELECT u.*, c.ClassName, p.ProgramName, f.FacultyName
+        FROM Users u
+        LEFT JOIN Class c ON u.ClassID = c.ClassID
+        LEFT JOIN ProgramInfo p ON u.ProgramID = p.ProgramID
+        LEFT JOIN Faculty f ON c.FacultyID = f.FacultyID
+        WHERE u.UserID = ?
+    ");
+    $stmt->execute([$user_id]);
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$student) {
+        throw new Exception("Không tìm thấy thông tin sinh viên");
+    }
+    
+    // Tính toán GPA và tín chỉ
+    $stmt = $conn->prepare("
+        SELECT AVG(g.TotalGPA) as avg_gpa
+        FROM Grades g
+        JOIN Enrollments e ON g.EnrollmentID = e.EnrollmentID
+        WHERE e.StudentID = ?
+    ");
+    $stmt->execute([$user_id]);
+    $gpa_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $gpa = $gpa_result['avg_gpa'] ? round($gpa_result['avg_gpa'], 2) : 0;
+    
+    $stmt = $conn->prepare("
+        SELECT SUM(s.Credit) as total_credits
+        FROM Enrollments e
+        JOIN Subjects s ON e.SubjectID = s.SubjectID
+        WHERE e.StudentID = ? AND e.GPA IS NOT NULL
+    ");
+    $stmt->execute([$user_id]);
+    $credits_result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $completed_credits = $credits_result['total_credits'] ?? 0;
+    
+    // Xử lý khi không có TotalRequiredCredits
+    $total_required = $student['TotalRequiredCredits'] ?? 120; // Giá trị mặc định nếu không có
+    $remaining_credits = max(0, $total_required - $completed_credits); // Đảm bảo không âm
+    $remaining_semesters = ceil($remaining_credits / 15);
+    
+} catch (PDOException $e) {
+    die("Lỗi khi truy vấn thông tin sinh viên: " . $e->getMessage());
+}
+
+// Lấy initial cho avatar
+$initial = strtoupper(mb_substr($student['FullName'], 0, 1, "UTF-8"));
+?>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Sinh Viên - Quản lý sinh viên</title>
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=stat_minus_1" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/css_header.css">
+    <link rel="stylesheet" href="../assets/css/css_student.css">
+    <link rel="stylesheet" href="../assets/css/css_dashboard.css">
+</head>
+<body>
+    <?php include '../includes/header.php'; ?>
+    
+    <div class="dashboard-container">
+        <div class="welcome-message">
+            Chào mừng sinh viên <strong><?= htmlspecialchars($student['FullName']) ?></strong>!
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value"><?= $gpa ?></div>
+                <div class="stat-label">GPA hiện tại</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value"><?= $completed_credits ?></div>
+                <div class="stat-label">Tín chỉ đã hoàn thành</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value"><?= $remaining_semesters ?></div>
+                <div class="stat-label">Học kỳ còn lại</div>
+            </div>
+        </div>
+        
+        <div class="functions-container">
+            <div class="function-card" onclick="window.location.href='student_schedule.php'">
+                <div class="function-icon">
+                    <span class="material-symbols-outlined">calendar_today</span>
+                </div>
+                <div class="function-title">Lịch học</div>
+                <div class="function-desc">Xem lịch học và thời khóa biểu</div>
+            </div>
+            
+            <div class="function-card" onclick="window.location.href='student_grades.php'">
+                <div class="function-icon">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                </div>
+                <div class="function-title">Kết quả học tập</div>
+                <div class="function-desc">Xem điểm số và kết quả học tập</div>
+            </div>
+            
+            <div class="function-card" onclick="window.location.href='student_profile.php'">
+                <div class="function-icon">
+                    <span class="material-symbols-outlined">account_circle</span>
+                </div>
+                <div class="function-title">Thông tin cá nhân</div>
+                <div class="function-desc">Cập nhật thông tin cá nhân</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/javascript/jsHeader.js"></script>
+    <script>
+        // Thêm script riêng cho trang sinh viên
+        document.addEventListener('DOMContentLoaded', function() {
+            // Xử lý sự kiện click cho các card chức năng
+            document.querySelectorAll('.function-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    window.location.href = this.getAttribute('onclick').match(/'(.*?)'/)[1];
+                });
+            });
+        });
+    </script>
+</body>
+</html>
