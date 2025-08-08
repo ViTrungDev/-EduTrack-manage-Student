@@ -1,0 +1,300 @@
+
+
+  /* Container */
+  .container {
+    padding: 30px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+  }
+
+  /* Cards container */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgb(20 20 45 / 0.05);
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card .label {
+    font-weight: 400;
+    font-size: 14px;
+    color: #656886;
+    margin-bottom: 8px;
+  }
+
+  .card .value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* Trend indicators */
+  .trend {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  .trend.up {
+    color: #2f973b;
+  }
+
+  .trend.down {
+    color: #d84a4a;
+  }
+
+  .trend svg {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+  }
+
+  /* Heading and export button container */
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 24px;
+    color: #1b1c33;
+  }
+
+  /* Export Button */
+  .btn-export {
+    background-color: #3e43f7;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-export:hover {
+    background-color: #2a2fc1;
+  }
+
+  .btn-export svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+  }
+
+  /* Filters and add button container */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+
+  select,
+  input[type="search"] {
+    border: 1px solid #d8d9e0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    min-width: 140px;
+    outline-offset: 0;
+    transition: border-color 0.25s ease;
+  }
+
+  select:focus,
+  input[type="search"]:focus {
+    border-color: #3e43f7;
+    outline: none;
+  }
+
+  input[type="search"] {
+    flex: 1 1 300px;
+    min-width: 220px;
+  }
+
+  /* Add Student Button */
+  .btn-add {
+    background-color: #30a14e;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .btn-add:hover {
+    background-color: #238038;
+  }
+
+  .btn-add svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+  }
+
+  /* Table styles */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(20 20 45 / 0.05);
+    overflow: hidden;
+    table-layout: fixed;
+  }
+
+  thead {
+    background-color: #4c51f7;
+    color: white;
+  }
+
+  thead th {
+    font-weight: 700;
+    padding: 14px 12px;
+    text-align: left;
+    font-size: 14px;
+    user-select: none;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #eee;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9f9fb;
+  }
+
+  tbody td {
+    padding: 14px 12px;
+    font-size: 14px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  tbody td img.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+  }
+
+  tbody td strong {
+    font-weight: 600;
+  }
+
+  /* Actions buttons in table */
+  .action-btn {
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+    margin-right: 8px;
+  }
+
+  .btn-edit {
+    background-color: #3366ff;
+  }
+
+  .btn-edit:hover {
+    background-color: #254eda;
+  }
+
+  .btn-delete {
+    background-color: #f44336;
+  }
+
+  .btn-delete:hover {
+    background-color: #c7362a;
+  }
+
+  .action-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+  }
+
+  /* Pagination */
+  .pagination {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #73788c;
+    user-select: none;
+  }
+
+  .pagination-info {
+    flex: 1;
+    font-style: italic;
+    color: #73788c;
+    font-size: 13px;
+  }
+
+  .pagination-buttons button {
+    border: 1.5px solid #d0d0e9;
+    background-color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    color: #73788c;
+    user-select: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .pagination-buttons button:hover:not(.active) {
+    border-color: #a6a8f9;
+    background-color: #f5f6ff;
+    color: #4c51f7;
+  }
+
+  .pagination-buttons button.active {
+    color: white;
+    background: linear-gradient(120deg, #4c51f7 0%, #2a2fc1 90%);
+    border-color: transparent;
+    pointer-events: none;
+  }

@@ -40,8 +40,8 @@ $initial = strtoupper(mb_substr($name, 0, 1, "UTF-8"));
     <!-- Thanh nav -->
     <nav class="header-nav">
       <ul class="nav-list">
-        <li class="nav-item"><a href="page/dashboard.php">Trang chủ</a></li>
-        <li class="nav-item"><a href="page/manage_students.php">Danh sách sinh viên</a></li>
+        <li class="nav-item"><a href="../page/dashboard.php">Trang chủ</a></li>
+        <li class="nav-item"><a href="../page/listStudents.php">Danh sách sinh viên</a></li>
 
         <?php if ($role !== 'teacher'): ?>
         <li class="nav-item"><a href="page/manage_teachers.php">Quản lý giáo viên</a></li>
