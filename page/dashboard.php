@@ -88,7 +88,7 @@ include '../Handlers/Handler_dashboard.php';
   <div class="content-main">
     <div class="history-student">
       <div class="history-header">
-        <h3>Lịch sử hoạt động</h3>
+        <h3>Sinh viên mới</h3>
         <a href="../page/history.php" class="btn btn-primary">Xem chi tiết</a>
       </div>
       <div class="history-list">

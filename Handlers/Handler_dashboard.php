@@ -21,10 +21,10 @@ $total_students = $stmt->fetchColumn();
 
 // ======= TỔNG SỐ SINH VIÊN MỚI =======
 $query = "SELECT FullName, StudentCode, CreatedAt 
-          FROM Users 
-          WHERE Role = 'student' 
-          ORDER BY CreatedAt DESC 
-          LIMIT 4";
+            FROM Users 
+            WHERE Role = 'student' 
+            ORDER BY CreatedAt DESC 
+            LIMIT 5";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $recentStudents = $stmt->fetchAll(PDO::FETCH_ASSOC);
