@@ -90,10 +90,10 @@ include '../includes/header.php';
           <?php if ($hasClass): ?><td><?= htmlspecialchars($row['ClassName'] ?? 'Chưa cập nhật') ?></td><?php endif; ?>
           <td><?= $row['CreatedAt'] ? date("d/m/Y", strtotime($row['CreatedAt'])) : '' ?></td>
           <td class="action-buttons">
-            <a href="edit_student.php?code=<?= urlencode($row['StudentCode']) ?>" class="btn-edit">
+            <a href="../page/edit_student.php?code=<?= urlencode($row['StudentCode']) ?>" class="btn-edit">
               <span class="action-buttons-icon material-symbols-outlined" style="color: white;">edit_square</span>
             </a>
-            <a href="delete_student.php?code=<?= urlencode($row['StudentCode']) ?>" class="btn-delete"
+            <a href="../Handlers/delete-student.php?code=<?= urlencode($row['StudentCode']) ?>" class="btn-delete"
               onclick="return confirm('Bạn có chắc muốn xóa sinh viên này?');">
               <span class="action-buttons-icon material-symbols-outlined" style="color: white;">delete</span>
             </a>

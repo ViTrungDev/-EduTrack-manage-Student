@@ -47,7 +47,7 @@ $initial = strtoupper(mb_substr($name, 0, 1, "UTF-8"));
         <li class="nav-item"><a href="page/manage_teachers.php">Quản lý giáo viên</a></li>
         <?php endif; ?>
 
-        <li class="nav-item"><a href="page/manage_addStudent.php">Thêm sinh viên</a></li>
+        <li class="nav-item"><a href="../page/add_student.php">Thêm sinh viên</a></li>
         <li class="nav-item"><a href="page/manage_courses.php">Quản lý môn học</a></li>
       </ul>
     </nav>
