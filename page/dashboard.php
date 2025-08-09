@@ -218,7 +218,7 @@ include '../Handlers/Handler_dashboard.php';
   </div>
   <div class="manage-footer">
     <div class="manage-item manage-student">
-      <a href="../page/student.php" class="manage-link">
+      <a href="../page/listStudents.php" class="manage-link">
         <div class="manage_group">
           <p class="group material-symbols-outlined">person</p>
           <div class="manage_student-desc">
