@@ -1,0 +1,104 @@
+.container{
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+.filter {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 30px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.filter label {
+    margin-right: 10px;
+}
+
+.courses {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.course {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 30%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.course h2 {
+    margin: 0;
+}
+
+.credits {
+    background-color: #e7ffec;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    display: inline-block;
+    color: #88b491;
+}
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 35px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn.green {
+    background-color: #28a745;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+.select-filter{
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+}
+h1{
+  margin: 0;
+  font-weight: 700;
+  font-size: 24px;
+  color: #1b1c33;
+}
+.course-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.course-code{
+    background-color: #c5f4ce;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    display: inline-block;
+    color: #88b491;
+}
+.student-info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.course-actions{
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
