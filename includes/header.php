@@ -44,7 +44,7 @@ $initial = strtoupper(mb_substr($name, 0, 1, "UTF-8"));
         <li class="nav-item"><a href="../page/listStudents.php">Danh sách sinh viên</a></li>
 
         <?php if ($role !== 'teacher'): ?>
-        <li class="nav-item"><a href="page/manage_teachers.php">Quản lý giáo viên</a></li>
+        <li class="nav-item"><a href="../page/manage_teachers.php">Quản lý giáo viên</a></li>
         <?php endif; ?>
 
         <li class="nav-item"><a href="../page/add_student.php">Thêm sinh viên</a></li>
