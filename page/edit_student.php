@@ -9,12 +9,12 @@ $code = $_GET['code'];
 
 // Lấy dữ liệu sinh viên
 if ($conn instanceof PDO) {
-    $stmt = $conn->prepare("SELECT UserID, FullName, ProgramID, ClassID FROM Users WHERE StudentCode = :code");
+    $stmt = $conn->prepare("SELECT UserID, FullName, ProgramID, ClassID, Password FROM Users WHERE StudentCode = :code");
     $stmt->execute([':code' => $code]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 } else {
     $codeEsc = $conn->real_escape_string($code);
-    $res = $conn->query("SELECT UserID, FullName, ProgramID, ClassID FROM Users WHERE StudentCode = '$codeEsc'");
+    $res = $conn->query("SELECT UserID, FullName, ProgramID, ClassID, Password FROM Users WHERE StudentCode = '$codeEsc'");
     $student = $res->fetch_assoc();
 }
 
@@ -42,7 +42,6 @@ if ($conn instanceof PDO) {
 ?>
 
 <style>
-/* CSS giữ nguyên như trước */
 form {
   max-width: 500px;
   min-height: 500px;
@@ -72,7 +71,22 @@ form select {
   transition: border-color 0.3s ease;
 }
 
-form input[type="text"]:focus,
+form input[type="password"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 18px;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+form input[type="password"]:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.5);
+}
+
 form select:focus {
   border-color: #4a90e2;
   outline: none;
@@ -128,6 +142,9 @@ form button:hover {
     </option>
     <?php endforeach; ?>
   </select>
+  <label>Mật khẩu (để trống nếu không thay đổi):</label>
+  <input type="password" name="Password" placeholder="Nhập mật khẩu mới"
+    value="<?= htmlspecialchars($student['Password']) ?>" />
 
   <button type="submit">Lưu thay đổi</button>
 </form>

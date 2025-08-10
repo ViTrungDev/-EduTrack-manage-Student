@@ -37,8 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':role' => $Role,
                 ':studentcode' => $StudentCode
             ]);
-
-            echo "Thêm sinh viên thành công!";
+            header("Location: ../page/add_student.php?add_student=success");
         } else {
             // Trường hợp mysqli
             $escapedUsername = $conn->real_escape_string($Username);
