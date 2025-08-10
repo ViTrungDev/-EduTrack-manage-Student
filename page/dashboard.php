@@ -240,7 +240,7 @@ include '../Handlers/Handler_dashboard.php';
       </a>
     </div>
     <div class="manage-item manage-program">
-      <a href="../page/program.php" class="manage-link">
+      <a href="../page/pageProgram.php" class="manage-link">
         <div class="manage_group">
           <p class="group material-symbols-outlined">book_2</p>
           <div class="manage_program-desc">
