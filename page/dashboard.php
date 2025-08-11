@@ -89,7 +89,7 @@ include '../Handlers/Handler_dashboard.php';
     <div class="history-student">
       <div class="history-header">
         <h3>Sinh viên mới</h3>
-        <a href="../page/history.php" class="btn btn-primary">Xem chi tiết</a>
+        <a href="../page/listStudents.php" class="btn btn-primary">Xem chi tiết</a>
       </div>
       <div class="history-list">
         <?php if (!empty($recentStudents)): ?>
@@ -229,7 +229,7 @@ include '../Handlers/Handler_dashboard.php';
       </a>
     </div>
     <div class="manage-item manage-teacher">
-      <a href="../page/teacher.php" class="manage-link">
+      <a href="../page/manage_teachers.php" class="manage-link">
         <div class="manage_group">
           <p class="group material-symbols-outlined">group</p>
           <div class="manage_teacher-desc">

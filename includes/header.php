@@ -69,7 +69,7 @@ $initial = strtoupper(mb_substr($name, 0, 1, "UTF-8"));
           <div class="role"><?= htmlspecialchars($role) ?></div>
           <div class="icon-links">
             <div class="icon-user">
-              <a class="icon-link" href="page/user_info.php">
+              <a class="icon-link" href="../page/user_info.php">
                 <span class="material-symbols-outlined">account_circle</span>
                 <span class="icon-text">Thông tin người dùng</span>
               </a>
