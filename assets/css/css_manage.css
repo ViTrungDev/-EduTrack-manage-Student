@@ -1,0 +1,352 @@
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1b2938;
+  }
+
+  p.subtitle {
+    margin: 6px 0 24px 0;
+    font-size: 0.95rem;
+    color: #7b8794;
+  }
+
+  /* Container */
+  .container {
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+
+  /* Header with button */
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  button#addTeacherBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #2563eb;
+    /* Blue 600 */
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  button#addTeacherBtn:hover,
+  button#addTeacherBtn:focus {
+    background-color: #1d4ed8;
+    /* Blue 700 */
+    outline: none;
+    box-shadow: 0 0 0 3px #bfdbfe;
+  }
+
+  /* Button icon + text */
+  button#addTeacherBtn svg {
+    width: 18px;
+    height: 18px;
+    stroke: white;
+    stroke-width: 2.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Search Filter form */
+  form#filterForm {
+    background-color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgb(15 15 15 / 0.07);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  input#searchInput {
+    flex: 1 1 300px;
+    padding: 12px 16px;
+    border: 1.5px solid #d1d5db;
+    /* cool gray */
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+
+  input#searchInput::placeholder {
+    color: #9ca3af;
+  }
+
+  input#searchInput:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px #bfdbfe;
+  }
+
+  select#departmentSelect {
+    flex: 0 0 160px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1.5px solid #d1d5db;
+    font-size: 1rem;
+    background: white url("data:image/svg+xml,%3Csvg fill='none' height='24' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center/1em auto;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  select#departmentSelect:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px #bfdbfe;
+  }
+
+  button#searchBtn {
+    background-color: #2563eb;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  button#searchBtn svg {
+    width: 18px;
+    height: 18px;
+    stroke: white;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  button#searchBtn:hover,
+  button#searchBtn:focus {
+    background-color: #1d4ed8;
+    outline: none;
+    box-shadow: 0 0 0 3px #bfdbfe;
+  }
+
+  /* Table */
+  table.teacher-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgb(15 15 15 / 0.07);
+    background: white;
+    table-layout: fixed;
+  }
+
+  thead {
+    background-color: #f0f4ff;
+    color: #4b5563;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: left;
+  }
+
+  thead th {
+    text-align: center;
+    padding: 14px 12px;
+    user-select: none;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background-color 0.15s ease;
+  }
+
+  tbody tr:hover {
+    background-color: #f9faff;
+  }
+
+  tbody td {
+    padding: 16px 12px;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #333f58;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+  }
+
+  /* STT narrow column */
+  tbody td.stt {
+    text-align: center;
+    width: 30px;
+    color: #6b7280;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  /* Name column with avatar and phone */
+  .teacher-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    word-break: break-word;
+  }
+
+  .teacher-name img.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+    border: 1.5px solid #ddd;
+    background-color: #e0e7ff;
+  }
+
+  .teacher-name-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* prevent overflow */
+  }
+
+  .teacher-name-details strong {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .teacher-name-details small {
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  /* Department (Khoa) label */
+  .dept-label {
+    display: inline-block;
+    background-color: #c7d4fc;
+    color: #3345c0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 14px;
+    user-select: none;
+    width: fit-content;
+    min-width: 36px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Email column */
+  td.email-column {
+    color: #4b5563;
+    font-weight: 500;
+    font-size: 0.9rem;
+    user-select: text;
+    overflow-wrap: break-word;
+    min-width: 150px;
+  }
+
+  /* Password column (hidden dots) */
+  td.password-column {
+    font-size: 1.3rem;
+    letter-spacing: 0.15em;
+    user-select: none;
+    text-align: center;
+    color: #999;
+    font-weight: 700;
+  }
+
+  /* Action buttons column */
+  td.actions-column {
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .action-btn {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .action-btn.edit-btn {
+    color: #ca8a04;
+    /* yellow-600 */
+  }
+
+  .action-btn.edit-btn:hover,
+  .action-btn.edit-btn:focus {
+    background-color: #fef3c7;
+    outline: none;
+  }
+
+  .action-btn.delete-btn {
+    color: #dc2626;
+    /* red-600 */
+    margin-left: 10px;
+  }
+
+  .action-btn.delete-btn:hover,
+  .action-btn.delete-btn:focus {
+    background-color: #fef2f2;
+    outline: none;
+  }
+
+  /* Icon SVGs */
+  svg.icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+strong{
+  text-align: center ;
+}
+#programSelect{
+    width: 200px;
+    padding: 12px 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+}
+#addTeacherBtn{
+  background-color: #4CAF50;
+  color: white !important;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: center;
+}
+#addTeacherBtn:hover {
+  background-color: #45a049;
+}

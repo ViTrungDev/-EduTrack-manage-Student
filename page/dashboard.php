@@ -88,7 +88,7 @@ include '../Handlers/Handler_dashboard.php';
   <div class="content-main">
     <div class="history-student">
       <div class="history-header">
-        <h3>Lịch sử hoạt động</h3>
+        <h3>Sinh viên mới</h3>
         <a href="../page/history.php" class="btn btn-primary">Xem chi tiết</a>
       </div>
       <div class="history-list">
@@ -218,7 +218,7 @@ include '../Handlers/Handler_dashboard.php';
   </div>
   <div class="manage-footer">
     <div class="manage-item manage-student">
-      <a href="../page/student.php" class="manage-link">
+      <a href="../page/listStudents.php" class="manage-link">
         <div class="manage_group">
           <p class="group material-symbols-outlined">person</p>
           <div class="manage_student-desc">
@@ -240,7 +240,7 @@ include '../Handlers/Handler_dashboard.php';
       </a>
     </div>
     <div class="manage-item manage-program">
-      <a href="../page/program.php" class="manage-link">
+      <a href="../page/pageProgram.php" class="manage-link">
         <div class="manage_group">
           <p class="group material-symbols-outlined">book_2</p>
           <div class="manage_program-desc">

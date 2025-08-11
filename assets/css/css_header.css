@@ -158,3 +158,6 @@
 .show-status-click{
   cursor: pointer;
 }
+.log-out{
+  color: #ea2525;
+}
