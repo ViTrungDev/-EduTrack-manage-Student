@@ -48,12 +48,14 @@ $initial = strtoupper(mb_substr($name, 0, 1, "UTF-8"));
         <?php endif; ?>
 
         <li class="nav-item"><a href="../page/add_student.php">Thêm sinh viên</a></li>
-        <li class="nav-item"><a href="../page/pageProgram.php">Quản lý môn học</a></li>
       </ul>
     </nav>
 
     <!-- Thông tin người dùng -->
-    <div class="header-right">
+    <div class="header-right"><a href="../page/ticket.php" class="nav-ticket"><span
+          class="material-symbols-outlined">construction</span>
+        <p>Ticket</p>
+      </a>
       <div class="avatar-circle">
         <span class="initial"><?= htmlspecialchars($initial) ?></span>
       </div>

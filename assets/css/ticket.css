@@ -1,0 +1,304 @@
+  :root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --success-color: #4cc9f0;
+    --warning-color: #f8961e;
+    --danger-color: #f72585;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    background-color: #f5f7fa;
+    color: var(--dark-color);
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .search-filter {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .search-box {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .search-box::before {
+    content: "🔍";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-color);
+  }
+
+  .filter-btn {
+    padding: 10px 15px;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .new-ticket-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .new-ticket-btn:hover {
+    background-color: var(--secondary-color);
+  }
+
+  .tickets-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+
+  .ticket-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .ticket-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .ticket-header {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+  }
+
+  .ticket-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    white-space: nowrap;        /* Không xuống dòng */
+    overflow: hidden;           /* Ẩn phần bị tràn */
+    text-overflow: ellipsis;    /* Hiển thị dấu ... */
+    display: block;             /* Hoặc inline-block nếu cần */
+    max-width: 300px;  
+  }
+
+  .ticket-id {
+    color: var(--gray-color);
+    font-size: 12px;
+  }
+
+  .ticket-status {
+    position: absolute;
+    top: 40px;
+    right: 15px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .status-open {
+    background-color: rgba(76, 201, 240, 0.1);
+    color: var(--success-color);
+  }
+
+  .status-pending {
+    background-color: rgba(248, 150, 30, 0.1);
+    color: var(--warning-color);
+  }
+
+  .status-closed {
+    background-color: rgba(247, 37, 133, 0.1);
+    color: var(--danger-color);
+  }
+
+  .ticket-body {
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .ticket-description {
+    color: var(--gray-color);
+    font-size: 14px;
+    margin-bottom: 15px;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: nowrap;       /* Ẩn phần bị tràn */
+    text-overflow: ellipsis;    /* Hiển thị dấu ... */
+    display: block;             /* Hoặc inline-block nếu cần */
+    max-width: 300px;  
+    }
+
+  .ticket-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--gray-color);
+  }
+
+  .ticket-footer {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ticket-assignee {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .assignee-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .assignee-name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .ticket-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .action-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f3f9;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-color);
+    transition: background-color 0.3s;
+  }
+
+  .action-btn:hover {
+    background-color: #e9ecef;
+  }
+
+  @media (max-width: 768px) {
+    .tickets-container {
+      grid-template-columns: 1fr;
+    }
+
+    .search-filter {
+      flex-direction: column;
+    }
+  }
+  .ticket-card{
+  text-decoration: none;
+  color: inherit;
+  display:inline-block;
+}
+  .search-input {
+    width: 775px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .search-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+  }
+  .select-input {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+  }
+  .filter-btn{
+    padding: 10px 45px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .filter-btn:hover {
+    opacity: 0.8;
+  }
+  .pagination-link{
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+
+  .pagination-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }

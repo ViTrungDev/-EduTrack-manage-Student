@@ -161,3 +161,17 @@
 .log-out{
   color: #ea2525;
 }
+.nav-ticket{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #6e80ba;
+    border-radius: 5px;
+    background-color: #6e80ba;
+    color: #fff;
+    padding: 5px 10px;
+    margin-right: 48px;
+}
+.nav-ticket:hover{
+  opacity: 0.8;
+}
