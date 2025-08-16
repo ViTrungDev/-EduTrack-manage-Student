@@ -84,20 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status'])) {
     }
 
     try {
-        // Lấy trạng thái cũ
         if ($conn instanceof PDO) {
             $stmtOld = $conn->prepare("SELECT Status FROM Ticket WHERE TicketID = :ticketId");
             $stmtOld->execute([':ticketId' => $ticketId]);
             $oldStatus = $stmtOld->fetchColumn();
 
-            // Update
             $stmt = $conn->prepare("UPDATE Ticket SET Status = :status WHERE TicketID = :ticketId");
             $stmt->execute([
                 ':status' => $newStatus,
                 ':ticketId' => $ticketId
             ]);
 
-            // Ghi log
             $stmtLog = $conn->prepare("
                 INSERT INTO TicketLogs (TicketID, Action, OldValue, NewValue, PerformedBy)
                 VALUES (:ticketId, 'Updated Status', :oldValue, :newValue, :userId)
@@ -172,6 +169,8 @@ if ($conn instanceof PDO) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ticket #<?= htmlspecialchars($ticket['TicketID']) ?></title>
   <link rel="stylesheet" href="../assets/css/ticket_info.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send" />
 </head>
 
 <body>
@@ -206,26 +205,102 @@ if ($conn instanceof PDO) {
       <hr>
       <p class="description"><?= nl2br(htmlspecialchars($ticket['Description'])) ?></p>
     </div>
-  </div>
 
-  <!-- Lịch sử xử lý -->
-  <div class="ticket-history">
-    <h3>Lịch sử xử lý</h3>
-    <ul>
-      <li><strong><?= htmlspecialchars($ticket['CreatedByName']) ?></strong> đã tạo ticket với trạng thái
-        <strong><?= htmlspecialchars($ticket['Status'] ?: 'Open') ?></strong>
-        (<?= htmlspecialchars($ticket['CreatedAt']) ?>)</li>
-      <?php foreach ($logs as $log): ?>
-      <?php if ($log['Action'] === 'Updated Status'): ?>
-      <li>
-        <strong><?= htmlspecialchars($log['UserName']) ?></strong>
-        chuyển trạng thái từ <strong><?= htmlspecialchars($log['OldValue'] ?: 'Open') ?></strong>
-        sang <strong><?= htmlspecialchars($log['NewValue']) ?></strong>
-        (<?= htmlspecialchars($log['CreatedAt']) ?>)
-      </li>
-      <?php endif; ?>
-      <?php endforeach; ?>
-    </ul>
+    <!-- Khung chat -->
+    <?php if (
+        in_array($ticket['Status'], ['Open', 'In Progress']) &&
+        ($_SESSION['user']['id'] === $ticket['CreatedBy'] || $_SESSION['user']['id'] === $ticket['AssignedTo'])
+    ): ?>
+    <div class="chat-section">
+      <h3>💬 Chat về ticket</h3>
+      <div class="chat-box" id="chatBox"></div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." style="width:80%;" />
+        <button id="sendBtn"><strong>Gửi</strong> <span class="material-symbols-outlined">send</span></button>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+    const socket = io("http://localhost:3001");
+
+    const ticketId = <?= json_encode($ticket['TicketID']) ?>;
+    const userId = <?= json_encode($_SESSION['user']['id']) ?>;
+    const userName = <?= json_encode($_SESSION['user']['name']) ?>;
+    const userRole = <?= json_encode($_SESSION['user']['role']) ?>;
+
+    // Join room ticket
+    socket.emit("joinTicket", {
+      ticketId,
+      userId
+    });
+
+    // Nhận lịch sử chat
+    socket.on("chatHistory", (messages) => {
+      messages.forEach(msg => {
+        addMessage(msg.FullName || msg.userId, msg.Message || msg.message, msg.CreatedAt || msg.createdAt, msg
+          .userId);
+      });
+    });
+
+    // Nhận tin nhắn mới
+    socket.on("newMessage", (msg) => {
+      addMessage(msg.FullName || msg.userId, msg.Message || msg.message, msg.CreatedAt || msg.createdAt, msg
+        .userId);
+    });
+
+    // Gửi tin nhắn
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
+    document.getElementById("chatInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+      const input = document.getElementById("chatInput");
+      const message = input.value;
+      if (message.trim() !== "") {
+        socket.emit("sendMessage", {
+          ticketId,
+          userId,
+          message
+        });
+        input.value = "";
+      }
+    }
+
+    function addMessage(sender, message, time, senderId) {
+      const chatBox = document.getElementById("chatBox");
+      const div = document.createElement("div");
+      div.className = "chat-message " + (senderId === userId ? "self" : "other");
+      div.textContent = `[${time}] ${sender}: ${message}`;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    </script>
+    <?php elseif ($ticket['Status'] === 'Closed'): ?>
+    <p><em>🔒 Chat đã đóng vì ticket đã được xử lý.</em></p>
+    <?php endif; ?>
+
+    <!-- Lịch sử xử lý -->
+    <div class="ticket-history">
+      <h3>Lịch sử xử lý</h3>
+      <ul>
+        <li><strong><?= htmlspecialchars($ticket['CreatedByName']) ?></strong> đã tạo ticket với trạng thái
+          <strong><?= htmlspecialchars($ticket['Status'] ?: 'Open') ?></strong>
+          (<?= htmlspecialchars($ticket['CreatedAt']) ?>)
+        </li>
+        <?php foreach ($logs as $log): ?>
+        <?php if ($log['Action'] === 'Updated Status'): ?>
+        <li>
+          <strong><?= htmlspecialchars($log['UserName']) ?></strong>
+          chuyển trạng thái từ <strong><?= htmlspecialchars($log['OldValue'] ?: 'Open') ?></strong>
+          sang <strong><?= htmlspecialchars($log['NewValue']) ?></strong>
+          (<?= htmlspecialchars($log['CreatedAt']) ?>)
+        </li>
+        <?php endif; ?>
+        <?php endforeach; ?>
+      </ul>
+    </div>
   </div>
 </body>
 
