@@ -139,7 +139,7 @@ $initial = strtoupper(mb_substr($student['FullName'], 0, 1, "UTF-8"));
         <div class="function-desc">Xem điểm số và kết quả học tập</div>
       </div>
 
-      <div class="function-card" onclick="location.href='student_profile.php'">
+      <div class="function-card" onclick="location.href='user_info.php'">
         <span class="material-symbols-outlined">account_circle</span>
         <div class="function-title">Thông tin cá nhân</div>
         <div class="function-desc">Cập nhật thông tin cá nhân</div>
