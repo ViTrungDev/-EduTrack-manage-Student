@@ -2,7 +2,7 @@
 $host = 'localhost';
 $dbname = 'EduTrack';
 $username = 'root';
-$password = '';
+$password = '123456789';
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

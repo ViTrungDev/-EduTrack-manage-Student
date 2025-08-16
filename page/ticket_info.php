@@ -4,7 +4,7 @@ include '../config/db.php';
 
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
+    header("Location: ../page/index.php");
     exit;
 }
 
